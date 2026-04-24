@@ -1,0 +1,120 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Update existing release?'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read Manifest and Zip Info
+        id: info
+        run: |
+          # Find Mod.manifest and MOD_DETAILS.txt
+          MANIFEST=$(find . -name "Mod.manifest" | head -n 1)
+          if [ -z "$MANIFEST" ]; then echo "::error::Mod.manifest not found!"; exit 1; fi
+          
+          DETAILS=$(find . -name "MOD_DETAILS.txt" | head -n 1)
+          MOD_ROOT=$(dirname "$MANIFEST")
+          
+          MAJOR=$(grep -oP 'version_major=\K\d+' "$MANIFEST")
+          MINOR=$(grep -oP 'version_minor=\K\d+' "$MANIFEST")
+          BUGFIX=$(grep -oP 'version_bugfix=\K\d+' "$MANIFEST")
+          MOD_VERSION="${MAJOR}.${MINOR}.${BUGFIX}"
+          
+          # Priority: ;MOD_ZIP_NAME in MOD_DETAILS.txt. Fallback: repo name.
+          ZIP_NAME=$(grep -oP ';MOD_ZIP_NAME\|\K.*' "$DETAILS" 2>/dev/null | head -n 1)
+          if [ -z "$ZIP_NAME" ]; then 
+            ZIP_NAME="${{ github.event.repository.name }}.zip"
+          fi
+          
+          echo "Detected Version: $MOD_VERSION"
+          echo "Detected Zip: $ZIP_NAME"
+          echo "Detected Root: $MOD_ROOT"
+          
+          echo "version=$MOD_VERSION" >> $GITHUB_OUTPUT
+          echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
+          echo "mod_root=$MOD_ROOT" >> $GITHUB_OUTPUT
+
+      - name: Check for Existing Tags
+        id: check_tags
+        run: |
+          VERSION=${{ steps.info.outputs.version }}
+          FORCE=${{ inputs.force_update }}
+          
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            if [ "$FORCE" == "true" ]; then
+              echo "Tag $VERSION exists, but 'Force Update' is ON. Proceeding..."
+            else
+              echo "::error::Tag $VERSION already exists! Enable 'Force Update' to overwrite."
+              exit 1
+            fi
+          fi
+
+      - name: Prepare Zip
+        run: |
+          MOD_ROOT=${{ steps.info.outputs.mod_root }}
+          ZIP_NAME=${{ steps.info.outputs.zip_name }}
+          MOD_DIR_NAME=$(basename "$MOD_ROOT")
+          
+          mkdir -p build/"$MOD_DIR_NAME"
+          
+          # Sync mod contents into a folder named after the mod root
+          rsync -av "$MOD_ROOT/" build/"$MOD_DIR_NAME" \
+            --exclude '.git*' \
+            --exclude '.github' \
+            --exclude 'build' \
+            --exclude '*.zip'
+          
+          cd build
+          zip -r "../$ZIP_NAME" "$MOD_DIR_NAME"
+
+      - name: Create or Update Tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          VERSION=${{ steps.info.outputs.version }}
+          FORCE=${{ inputs.force_update }}
+
+          if [ "$FORCE" == "true" ]; then
+            git tag -f "$VERSION"
+            git push -f origin "$VERSION"
+          else
+            git tag "$VERSION"
+            git push origin "$VERSION"
+          fi
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.info.outputs.zip_name }}-build
+          path: ${{ steps.info.outputs.zip_name }}
+          retention-days: 5
+
+      - name: Create or Update Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.info.outputs.version }}
+          name: ${{ steps.info.outputs.version }}
+          artifacts: ${{ steps.info.outputs.zip_name }}
+          allowUpdates: ${{ inputs.force_update }}
+          removeArtifacts: true
+          draft: ${{ inputs.force_update == false }}
+          generateReleaseNotes: ${{ inputs.force_update == false }}
+          makeLatest: true
+          bodyFile: ".github/release_notes.md"

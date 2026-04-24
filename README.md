@@ -1,4 +1,4 @@
-# *Moar-RADARs-Delta-V-Mod*
+# *Moar RADARs*
 ***Mod that introduces new RADARs for ΔV: Rings of Saturn***
 
 > [!WARNING]
