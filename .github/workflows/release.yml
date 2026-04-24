@@ -34,7 +34,11 @@ jobs:
           MAJOR=$(grep -oP 'version_major=\K\d+' "$MANIFEST")
           MINOR=$(grep -oP 'version_minor=\K\d+' "$MANIFEST")
           BUGFIX=$(grep -oP 'version_bugfix=\K\d+' "$MANIFEST")
-          MOD_VERSION="${MAJOR}.${MINOR}.${BUGFIX}"
+          METADATA=$(grep -oP 'version_metadata="\K[^"]+' "$MANIFEST" || echo "")
+          MOD_VERSION="v${MAJOR}.${MINOR}.${BUGFIX}"
+          if [ -n "$METADATA" ]; then
+            MOD_VERSION="${MOD_VERSION}-${METADATA}"
+          fi
           
           # Priority: ;MOD_ZIP_NAME in MOD_DETAILS.txt. Fallback: repo name.
           ZIP_NAME=$(grep -oP ';MOD_ZIP_NAME\|\K.*' "$DETAILS" 2>/dev/null | head -n 1)
@@ -42,13 +46,18 @@ jobs:
             ZIP_NAME="${{ github.event.repository.name }}.zip"
           fi
           
+          # Folder name inside zip is always derived from MOD_ZIP_NAME (without .zip)
+          MOD_DIR_NAME="${ZIP_NAME%.zip}"
+          
           echo "Detected Version: $MOD_VERSION"
           echo "Detected Zip: $ZIP_NAME"
           echo "Detected Root: $MOD_ROOT"
+          echo "Detected Dir Name: $MOD_DIR_NAME"
           
           echo "version=$MOD_VERSION" >> $GITHUB_OUTPUT
           echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
           echo "mod_root=$MOD_ROOT" >> $GITHUB_OUTPUT
+          echo "mod_dir_name=$MOD_DIR_NAME" >> $GITHUB_OUTPUT
 
       - name: Check for Existing Tags
         id: check_tags
@@ -69,11 +78,11 @@ jobs:
         run: |
           MOD_ROOT=${{ steps.info.outputs.mod_root }}
           ZIP_NAME=${{ steps.info.outputs.zip_name }}
-          MOD_DIR_NAME=$(basename "$MOD_ROOT")
+          MOD_DIR_NAME=${{ steps.info.outputs.mod_dir_name }}
           
           mkdir -p build/"$MOD_DIR_NAME"
           
-          # Sync mod contents into a folder named after the mod root
+          # Sync mod contents into a folder named after the mod
           rsync -av "$MOD_ROOT/" build/"$MOD_DIR_NAME" \
             --exclude '.git*' \
             --exclude '.github' \
