@@ -42,13 +42,24 @@ jobs:
             ZIP_NAME="${{ github.event.repository.name }}.zip"
           fi
           
+          # Determine the mod folder name for zip structure.
+          # If manifest is at repo root (MOD_ROOT="."), use the zip name (without .zip) as folder.
+          # Otherwise use the actual directory name.
+          if [ "$MOD_ROOT" = "." ]; then
+            MOD_DIR_NAME="${ZIP_NAME%.zip}"
+          else
+            MOD_DIR_NAME=$(basename "$MOD_ROOT")
+          fi
+          
           echo "Detected Version: $MOD_VERSION"
           echo "Detected Zip: $ZIP_NAME"
           echo "Detected Root: $MOD_ROOT"
+          echo "Detected Dir Name: $MOD_DIR_NAME"
           
           echo "version=$MOD_VERSION" >> $GITHUB_OUTPUT
           echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
           echo "mod_root=$MOD_ROOT" >> $GITHUB_OUTPUT
+          echo "mod_dir_name=$MOD_DIR_NAME" >> $GITHUB_OUTPUT
 
       - name: Check for Existing Tags
         id: check_tags
@@ -69,11 +80,11 @@ jobs:
         run: |
           MOD_ROOT=${{ steps.info.outputs.mod_root }}
           ZIP_NAME=${{ steps.info.outputs.zip_name }}
-          MOD_DIR_NAME=$(basename "$MOD_ROOT")
+          MOD_DIR_NAME=${{ steps.info.outputs.mod_dir_name }}
           
           mkdir -p build/"$MOD_DIR_NAME"
           
-          # Sync mod contents into a folder named after the mod root
+          # Sync mod contents into a folder named after the mod
           rsync -av "$MOD_ROOT/" build/"$MOD_DIR_NAME" \
             --exclude '.git*' \
             --exclude '.github' \
