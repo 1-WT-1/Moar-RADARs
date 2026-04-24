@@ -1,0 +1,4 @@
+[2.0.4]
+1="* IMPORTANT DUE TO THIS UPDATE YOU MAY HAVE DUPLICATE ZIP DELETE ANYTHING THAT IS NOT MoarRadars.zip"
+2="* Renamed mod zip"
+3="* Removed space from mod folder"

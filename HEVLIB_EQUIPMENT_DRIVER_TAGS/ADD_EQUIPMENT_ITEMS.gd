@@ -9,7 +9,7 @@ const SYSTEM_RADAR_DOPPLER = {
 	"slot_type": "LIDAR",
 	"equipment_type": "SENSOR_LIDAR",
 	"weapon_slot": {
-		"path": "res://Moar RADARs/enceladus/SYSTEM_RADAR_DOPPLER.tscn",
+		"path": "res://MoarRADARs/enceladus/SYSTEM_RADAR_DOPPLER.tscn",
 		"data": []
 	}
 }
@@ -25,7 +25,7 @@ const SYSTEM_RADAR_CONE = {
 	"slot_type": "LIDAR",
 	"equipment_type": "SENSOR_LIDAR",
 	"weapon_slot": {
-		"path": "res://Moar RADARs/enceladus/SYSTEM_RADAR_CONE.tscn",
+		"path": "res://MoarRADARs/enceladus/SYSTEM_RADAR_CONE.tscn",
 		"data": []
 	}
 }
@@ -41,7 +41,7 @@ const SYSTEM_RADAR_OPA = {
 	"slot_type": "LIDAR",
 	"equipment_type": "SENSOR_LIDAR",
 	"weapon_slot": {
-		"path": "res://Moar RADARs/enceladus/SYSTEM_RADAR_OPA.tscn",
+		"path": "res://MoarRADARs/enceladus/SYSTEM_RADAR_OPA.tscn",
 		"data": []
 	}
 }
@@ -57,7 +57,7 @@ const SYSTEM_RADAR_OPA_DOPPLER = {
 	"slot_type": "LIDAR",
 	"equipment_type": "SENSOR_LIDAR",
 	"weapon_slot": {
-		"path": "res://Moar RADARs/enceladus/SYSTEM_RADAR_OPA_DOPPLER.tscn",
+		"path": "res://MoarRADARs/enceladus/SYSTEM_RADAR_OPA_DOPPLER.tscn",
 		"data": []
 	}
 }
@@ -73,7 +73,7 @@ const SYSTEM_RADAR_HYBRID = {
 	"slot_type": "LIDAR",
 	"equipment_type": "SENSOR_LIDAR",
 	"weapon_slot": {
-		"path": "res://Moar RADARs/enceladus/SYSTEM_RADAR_HYBRID.tscn",
+		"path": "res://MoarRADARs/enceladus/SYSTEM_RADAR_HYBRID.tscn",
 		"data": []
 	}
 }

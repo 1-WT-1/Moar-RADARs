@@ -4,7 +4,7 @@ const MOD_PRIORITY = 0
 const MOD_NAME = "Moar RADARs!"
 const MOD_VERSION_MAJOR = 2
 const MOD_VERSION_MINOR = 0
-const MOD_VERSION_BUGFIX = 3
+const MOD_VERSION_BUGFIX = 4
 const MOD_VERSION_METADATA = ""
 
 var modPath: String = get_script().resource_path.get_base_dir() + "/"
