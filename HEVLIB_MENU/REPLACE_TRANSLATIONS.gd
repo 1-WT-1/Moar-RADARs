@@ -30,9 +30,7 @@
 # OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
 # [/license]
-
 
 const TRANSLATIONS = {
 	"master_locale": "en",
@@ -40,6 +38,10 @@ const TRANSLATIONS = {
 		"MOARRADARS_MOD_DESCRIPTION": {
 			"string": "Mod that introduces new RADARs",
 			"version_hash": 1471896669
+		},
+		"MOARRADARS_MOD_BRIEF": {
+			"string": "New RADARs",
+			"version_hash": 2615533324
 		},
 		"SYSTEM_RADAR_DOPPLER": {
 			"string": "DSR-100 Doppler Sweeping RADAR",
@@ -126,6 +128,10 @@ const TRANSLATIONS = {
 		"MOARRADARS_MOD_DESCRIPTION": {
 			"string": "Мод, що додає нові РАДАРИ",
 			"version_hash": 1471896669
+		},
+		"MOARRADARS_MOD_BRIEF": {
+			"string": "Нові РАДАРИ",
+			"version_hash": 0
 		},
 		"SYSTEM_RADAR_DOPPLER": {
 			"string": "Доплерівський скануючий РАДАР DSR-100",
