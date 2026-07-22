@@ -1,3 +1,8 @@
+[2.1.0]
+1="* Converted to modlet"
+2="* Added LICENSE"
+3="* Cleaned unused i18n"
+
 [2.0.4]
 1="* IMPORTANT DUE TO THIS UPDATE YOU MAY HAVE DUPLICATE ZIP DELETE ANYTHING THAT IS NOT MoarRadars.zip"
 2="* Renamed mod zip"

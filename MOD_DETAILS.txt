@@ -2,6 +2,8 @@
 ;MOD_NAME|Moar RADARs
 ;MOD_ZIP_NAME|MoarRADARs.zip
 
+[center][b]Moar RADARs[/b][/center]
+
 [b]Cutting-Edge Detection Systems Released by Leading Manufacturers[/b]
 [i]From Minding LF, Coherent Light, and Runasimi[/i]
 Leading manufacturers continue to push the boundaries of detection technology with the release of the DSR-100 and the upgraded PR-500D, expanding the arsenal of tools available for space exploration and navigation.
