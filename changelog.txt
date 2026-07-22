@@ -1,3 +1,6 @@
+[2.1.1]
+1="* Updated translations"
+
 [2.1.0]
 1="* Converted to modlet"
 2="* Added LICENSE"
